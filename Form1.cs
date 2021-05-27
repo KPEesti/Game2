@@ -10,22 +10,35 @@ namespace Game_2
         public Form1()
         {
             DoubleBuffered = true;
-            FormBorderStyle = FormBorderStyle.FixedToolWindow;
             ClientSize = new Size(
                 GameController.MapWidth * 32,
                 GameController.MapHeight * 32);
 
 
             var timer = new Timer {Interval = 100};
-            timer.Tick += (sender, args) => { Invalidate(); };
-            timer.Start();
-
-            Paint += (sender, args) =>
+            timer.Tick += (sender, args) =>
             {
-                var g = args.Graphics;
-                GameController.DrawMap(g);
-                _player.PlayAnimation(g);
+                foreach (var bullet in _player.Bullets)
+                {
+                    bullet.Move();
+                    if (!bullet.IsFlying) _player.Bullets.Remove(bullet);
+                }
+
+                Invalidate();
             };
+            timer.Start();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+             var g = e.Graphics;
+            g.DrawLine(Pens.Indigo, _player.Body.Location, this.PointToClient(MousePosition));
+            GameController.DrawMap(g);
+            _player.PlayAnimation(g);
+            foreach (var bullet in _player.Bullets)
+            {
+                bullet.PlayAnimation(g);
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -33,20 +46,28 @@ namespace Game_2
             switch (e.KeyData)
             {
                 case Keys.A:
-                case Keys.Left:
                     _player.MoveLeft();
                     break;
                 case Keys.D:
-                case Keys.Right:
                     _player.MoveRight();
                     break;
                 case Keys.W:
-                case Keys.Up:
                     _player.MoveUp();
                     break;
                 case Keys.S:
-                case Keys.Down:
                     _player.MoveDown();
+                    break;
+                case Keys.Right:
+                    _player.SpawnBullet(Rotation.Right);
+                    break;
+                case Keys.Left:
+                    _player.SpawnBullet(Rotation.Left);
+                    break;
+                case Keys.Up:
+                    _player.SpawnBullet(Rotation.Up);
+                    break;
+                case Keys.Down:
+                    _player.SpawnBullet(Rotation.Down);
                     break;
             }
         }

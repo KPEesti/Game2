@@ -7,12 +7,12 @@ namespace Game_2
 {
     public static class GameController
     {
-        private static Image sheet = new Bitmap(Path
-            .Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
+        private static readonly Image Sheet = new Bitmap(Path
+            .Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.FullName ?? string.Empty,
                 "Sprites\\Ground-Sheet.png"));
+        
 // GGGGGGGGGGGGGGGGGGGGGGGG <= 20 стенок
 // EEEEEEEEEEEEEEEEEEEEEEEE <= 20 пустых клеток
-
         private const string Level1 = @"
 GGGGGGGGGGGGGGGGGGGGGGGG
 GEEEEEEEEEEEEEEEEEEEEEEG
@@ -76,8 +76,8 @@ GGGGGGGGGGGGGGGGGGGGGGGG";
             {
                 // g.FillRectangle(cell.HaveCollision is true ? Brushes.Brown : Brushes.Wheat,
                 //     cell.Rect);
-                g.DrawImage(sheet, new Rectangle(new Point(cell.X, cell.Y), new Size(32, 32)),
-                    cell.HaveCollision ? 32 : 0, 0, 32, 32, GraphicsUnit.Pixel);
+                 g.DrawImage(Sheet, new Rectangle(new Point(cell.X, cell.Y), new Size(32, 32)),
+                     cell.HaveCollision ? 32 : 0, 0, 32, 32, GraphicsUnit.Pixel);
             }
         }
     }

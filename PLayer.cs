@@ -16,12 +16,12 @@ namespace Game_2
         private const int PlayerSpeed = 2;
         private const int MaxHealth = 100;
 
-        public int HealthPoint { get; private set; }
+        public int HealthPoint { get; }
 
         public Rectangle Body;
 
-        private Image Sheet = new Bitmap(Path
-            .Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
+        private readonly Image _sheet = new Bitmap(Path
+            .Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.FullName ?? string.Empty,
                 "Sprites\\Hero\\Soldier-Sheet.png"));
 
         private int _currentLimit;
@@ -29,6 +29,9 @@ namespace Game_2
         private int _currentAnimation;
         private const int IdleFrames = 6;
         private const int RunFrames = 6;
+
+        public List<Bullet> Bullets = new List<Bullet>();
+        private int _ammoCount;
 
         public PLayer(int x, int y)
         {
@@ -39,9 +42,11 @@ namespace Game_2
             HealthPoint = MaxHealth;
 
             _currentLimit = IdleFrames;
+            _ammoCount = 10;
         }
 
         #region Movement
+
         private bool CanMoveRight()
         {
             var walls = FindWalls();
@@ -103,11 +108,10 @@ namespace Game_2
             return GameController.Map.Cast<Cell>().ToList()
                 .Where(x => x.CellType == CellType.Wall && x.Rect.IntersectsWith(Body)).ToList();
         }
+
         #endregion
 
         #region Health
-
-        
 
         #endregion
 
@@ -116,7 +120,7 @@ namespace Game_2
         public void PlayAnimation(Graphics g)
         {
             //g.FillRectangle(Brushes.Indigo, Body);
-            g.DrawImage(Sheet,new Rectangle(new Point(X,Y), new Size(32, 32)),
+            g.DrawImage(_sheet, new Rectangle(new Point(X, Y), new Size(32, 32)),
                 32 * _currentFrame, 32 * _currentAnimation, Width, Height, GraphicsUnit.Pixel);
 
             if (_currentFrame < _currentLimit - 1)
@@ -141,18 +145,18 @@ namespace Game_2
         }
 
         #endregion
-        
-    }
 
-    public class Bullet
-    {
-        private Point _position;
-        private double _rotation;
-        private int _speed;
-
-        public Bullet(Point position)
+        public void SpawnBullet(Rotation rotation)
         {
-            _position = position;
+            //if (_ammoCount <= 0) return;
+            Bullets.Add(new Bullet(new Point(X, Y), rotation));
+            _ammoCount--;
+        }
+
+        public void DeleteBullet()
+        {
+            foreach (var bullet in Bullets.Where(bullet => !bullet.IsFlying)) 
+                Bullets.Remove(bullet);
         }
     }
 }
