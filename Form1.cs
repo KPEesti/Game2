@@ -6,7 +6,7 @@ namespace Game_2
     public sealed partial class Form1 : Form
     {
         private readonly PLayer _player = new PLayer(256, 128);
-        private readonly Enemy1 _enemy1 = new Enemy1(512, 512);
+        private readonly Enemy1 _enemy1 = new Enemy1(512, 128);
 
         public Form1()
         {
