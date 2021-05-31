@@ -8,7 +8,7 @@ namespace Game_2
     public static class GameController
     {
         private static readonly Image Sheet = new Bitmap(Path
-            .Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent?.Parent?.FullName ?? string.Empty,
+            .Combine(new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent?.FullName ?? string.Empty,
                 "Sprites\\Ground-Sheet.png"));
         
 // GGGGGGGGGGGGGGGGGGGGGGGG <= 20 стенок

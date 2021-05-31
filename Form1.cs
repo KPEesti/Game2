@@ -6,6 +6,7 @@ namespace Game_2
     public sealed partial class Form1 : Form
     {
         private readonly PLayer _player = new PLayer(256, 128);
+        private readonly Enemy1 _enemy1 = new Enemy1(512, 512);
 
         public Form1()
         {
@@ -24,6 +25,10 @@ namespace Game_2
                     if (!bullet.IsFlying) _player.Bullets.Remove(bullet);
                 }
 
+                var playerPos = new Point(_player.X, _player.Y);
+                _enemy1.PlayerPos = playerPos;
+
+                _enemy1.MoveToPlayer();
                 Invalidate();
             };
             timer.Start();
@@ -31,14 +36,11 @@ namespace Game_2
 
         protected override void OnPaint(PaintEventArgs e)
         {
-             var g = e.Graphics;
-            g.DrawLine(Pens.Indigo, _player.Body.Location, this.PointToClient(MousePosition));
+            var g = e.Graphics;
             GameController.DrawMap(g);
             _player.PlayAnimation(g);
-            foreach (var bullet in _player.Bullets)
-            {
-                bullet.PlayAnimation(g);
-            }
+            g.FillRectangle(Brushes.Indigo, _enemy1.Body);
+            foreach (var bullet in _player.Bullets) bullet.PlayAnimation(g);
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

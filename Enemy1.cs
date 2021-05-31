@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Game_2
 {
@@ -10,11 +11,13 @@ namespace Game_2
         private const int Width = 32;
         private const int Height = 32;
 
-        private const int EnemySpeed = 10;
+        private const int Speed = 10;
         private const int MaxHealth = 100;
 
         private int _healthPoint;
         private int _damage = 25;
+
+        public Point PlayerPos { get; set; }
 
         public Rectangle Body;
         
@@ -25,6 +28,30 @@ namespace Game_2
             Body = new Rectangle(x, y, Width, Height);
 
             _healthPoint = MaxHealth;
+        }
+
+        public void MoveToPlayer()
+        {
+            if (PlayerPos.X <= X && Math.Abs(PlayerPos.X - X) > 32)
+            {
+                Body.X -= Speed;
+                X -= Speed;
+            }
+            else if (PlayerPos.X > X && Math.Abs(PlayerPos.X - X) > 32)
+            {
+                Body.X += Speed;
+                X += Speed;
+            }
+            else if (PlayerPos.Y <= Y && Math.Abs(PlayerPos.X - X) <= 32)
+            {
+                Body.Y -= Speed;
+                Y -= Speed;
+            }
+            else if (PlayerPos.Y > Y && Math.Abs(PlayerPos.X - X) <= 32)
+            {
+                Body.Y += Speed;
+                Y += Speed;
+            }
         }
     }
 }

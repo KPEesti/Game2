@@ -7,8 +7,8 @@ namespace Game_2
 {
     public class PLayer
     {
-        private int X { get; set; }
-        private int Y { get; set; }
+        public int X { get; private set; }
+        public int Y { get; private set; }
 
         private const int Width = 32;
         private const int Height = 32;
@@ -35,8 +35,8 @@ namespace Game_2
 
         public PLayer(int x, int y)
         {
-            X = x;
-            Y = y;
+            X = x + 16;
+            Y = y + 16;
             Body = new Rectangle(x, y, Width, Height);
 
             HealthPoint = MaxHealth;
